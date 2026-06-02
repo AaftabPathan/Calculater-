@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A premium glassmorphic calculator with multiple themes, a toggleable scientific engine, sound effects, and standard operations history.">
+  <title>Aether Calc - Premium Glassmorphic Calculator</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Premium Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-cosmic">
+  <!-- Dynamic Space Glows (Moving Orbs) -->
+  <div class="glow-orb orb-1"></div>
+  <div class="glow-orb orb-2"></div>
+  <div class="glow-orb orb-3"></div>
+
+  <!-- App Wrapper -->
+  <main class="app-wrapper">
+    <!-- Calculator Card -->
+    <div class="calc-card" id="calcCard">
+      
+      <!-- Top Action Bar -->
+      <header class="calc-header">
+        <div class="brand">
+          <span class="brand-logo">▲</span>
+          <span class="brand-name">Aether Calc</span>
+        </div>
+
+        <div class="controls-group">
+          <!-- Theme Picker Dropdown -->
+          <div class="theme-picker-container">
+            <button class="icon-btn" id="themePickerBtn" title="Switch Theme" aria-label="Switch Theme">
+              <svg viewBox="0 0 24 24" class="icon"><path d="M12 3a9 9 0 1 0 9 9 9.01 9.01 0 0 0-9-9zm0 16a7 7 0 1 1 7-7 7.008 7.008 0 0 1-7 7zm0-12a5 5 0 1 0 5 5 5.006 5.006 0 0 0-5-5z"/></svg>
+            </button>
+            <div class="theme-dropdown" id="themeDropdown">
+              <button class="theme-opt active" data-theme="cosmic">Cosmic Dark</button>
+              <button class="theme-opt" data-theme="aurora">Emerald Aurora</button>
+              <button class="theme-opt" data-theme="sakura">Sakura Glass</button>
+            </div>
+          </div>
+
+          <!-- Sound Effects Switch -->
+          <button class="icon-btn" id="soundBtn" title="Toggle Sound Feedback (Web Audio API)" aria-label="Toggle Sound">
+            <svg viewBox="0 0 24 24" class="icon sound-on-icon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+            <svg viewBox="0 0 24 24" class="icon sound-off-icon hidden"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.21.05-.42.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73 4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+          </button>
+
+          <!-- History Logs Drawer Toggle -->
+          <button class="icon-btn" id="historyBtn" title="View Calculation History" aria-label="View History">
+            <svg viewBox="0 0 24 24" class="icon"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 1 1 7 7 7.07 7.07 0 0 1-6-3H4.22A9 9 0 1 0 13 3zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+          </button>
+
+          <!-- Expand Scientific Grid Toggle -->
+          <button class="icon-btn" id="scientificToggleBtn" title="Toggle Scientific Features" aria-label="Toggle Scientific Mode">
+            <svg viewBox="0 0 24 24" class="icon"><path d="M19.07 4.93a10 10 0 1 0 0 14.14 10 10 0 0 0 0-14.14zM12 18a6 6 0 1 1 6-6 6 6 0 0 1-6 6zm-1-8.5a1.5 1.5 0 1 1 1.5-1.5A1.5 1.5 0 0 1 11 9.5zm2 5a1.5 1.5 0 1 1-1.5-1.5 1.5 1.5 0 0 1 1.5 1.5z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Calculator Main Interface Area -->
+      <div class="calc-body">
+        <!-- Floating Display Screen -->
+        <section class="display-screen" aria-label="Calculator Display">
+          <!-- Equation Stream Tracker -->
+          <div class="expression-line" id="expressionLine"></div>
+          <!-- Primary Numerical Viewport -->
+          <div class="primary-line" id="primaryLine">0</div>
+          <!-- Memory Indicator -->
+          <div class="memory-badge hidden" id="memoryBadge">M</div>
+        </section>
+
+        <!-- Main Buttons Container (Flex for split-layout when scientific is on) -->
+        <div class="grids-wrapper">
+          <!-- Scientific Keypad Drawer (Collapsible) -->
+          <section class="keypad scientific-keypad collapsed" id="scientificPanel" aria-label="Scientific Keypad">
+            <button class="btn btn-sci" data-action="sin">sin</button>
+            <button class="btn btn-sci" data-action="cos">cos</button>
+            <button class="btn btn-sci" data-action="tan">tan</button>
+            <button class="btn btn-sci" data-action="log">log</button>
+            <button class="btn btn-sci" data-action="ln">ln</button>
+            
+            <button class="btn btn-sci" data-action="square">x²</button>
+            <button class="btn btn-sci" data-action="cube">x³</button>
+            <button class="btn btn-sci" data-action="power">xʸ</button>
+            <button class="btn btn-sci" data-action="sqrt">√x</button>
+            <button class="btn btn-sci" data-action="pi">π</button>
+            
+            <button class="btn btn-sci" data-action="e">e</button>
+            <button class="btn btn-sci" data-action="parenOpen">(</button>
+            <button class="btn btn-sci" data-action="parenClose">)</button>
+            <button class="btn btn-sci" data-action="factorial">x!</button>
+            <button class="btn btn-sci" data-action="exp">EXP</button>
+          </section>
+
+          <!-- Standard Standard Grid -->
+          <section class="keypad standard-keypad" aria-label="Standard Keypad">
+            <!-- Memory Keys -->
+            <button class="btn btn-mem" data-action="mc">MC</button>
+            <button class="btn btn-mem" data-action="mr">MR</button>
+            <button class="btn btn-mem" data-action="m-plus">M+</button>
+            <button class="btn btn-mem" data-action="m-minus">M-</button>
+
+            <!-- Row 1: Actions -->
+            <button class="btn btn-special" data-action="clear">AC</button>
+            <button class="btn btn-special" data-action="backspace" aria-label="Delete last character">
+              <svg viewBox="0 0 24 24" class="btn-icon"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg>
+            </button>
+            <button class="btn btn-special" data-action="percent">%</button>
+            <button class="btn btn-operator" data-action="divide">÷</button>
+
+            <!-- Row 2: Numbers + Mul -->
+            <button class="btn btn-num" data-val="7">7</button>
+            <button class="btn btn-num" data-val="8">8</button>
+            <button class="btn btn-num" data-val="9">9</button>
+            <button class="btn btn-operator" data-action="multiply">×</button>
+
+            <!-- Row 3: Numbers + Sub -->
+            <button class="btn btn-num" data-val="4">4</button>
+            <button class="btn btn-num" data-val="5">5</button>
+            <button class="btn btn-num" data-val="6">6</button>
+            <button class="btn btn-operator" data-action="subtract">−</button>
+
+            <!-- Row 4: Numbers + Add -->
+            <button class="btn btn-num" data-val="1">1</button>
+            <button class="btn btn-num" data-val="2">2</button>
+            <button class="btn btn-num" data-val="3">3</button>
+            <button class="btn btn-operator" data-action="add">+</button>
+
+            <!-- Row 5: Special inputs + Equals -->
+            <button class="btn btn-num" data-action="negate">±</button>
+            <button class="btn btn-num" data-val="0">0</button>
+            <button class="btn btn-num" data-val=".">.</button>
+            <button class="btn btn-equals" data-action="equals">=</button>
+          </section>
+        </div>
+      </div>
+
+      <!-- Sliding History Drawer overlay inside the card -->
+      <aside class="history-drawer" id="historyDrawer">
+        <div class="history-header">
+          <h3>Calculation History</h3>
+          <button class="icon-btn" id="closeHistoryBtn" aria-label="Close History">
+            <svg viewBox="0 0 24 24" class="icon"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
+        </div>
+        <div class="history-content" id="historyContent">
+          <div class="empty-history-msg">No history cached yet. Run some operations!</div>
+        </div>
+        <div class="history-footer">
+          <button class="clear-history-btn" id="clearHistoryBtn">Clear Cache</button>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
