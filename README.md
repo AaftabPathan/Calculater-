@@ -108,3 +108,17 @@ Calculater/
 
 ## 🛡️ License
 Designed with 💜. Feel free to clone, customize, and build on top of Aether Calc!
+
+## 👨‍💻 Author
+
+**Aaftab Pathan**
+
+* GitHub: https://github.com/AaftabPathan
+* LinkedIn: https://linkedin.com/in/aaftabpathan
+* Gmail: aaftabaayubpathan@gmail.com
+
+---
+
+## ⭐ Support 
+
+If you like this project, give it a ⭐ on GitHub!
